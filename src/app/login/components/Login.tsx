@@ -15,7 +15,7 @@ export default function LoginForm() {
           </div>
         </div>
         <div className="flex flex-col justify-center px-6 lg:px-8">
-          <div className="sm:mx-auto sm:w-full">
+          <div className="sm:mx-auto">
             <img
               className="mx-auto h-10 w-auto"
               src="logo.svg"
