@@ -18,3 +18,12 @@
 
 body {
 }
+
+.auth-container {
+  height: 100vh;
+  width: 100%;
+  /* background: rgb(216, 241, 241); */
+  display: grid;
+  grid-template-columns: 3fr 4fr;
+  gap: 10px;
+}
