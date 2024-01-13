@@ -1,7 +1,7 @@
 
+const baseUrl = 'https://nextjsacceleratorauth.appskeeper.in/v1/';
 
-
-const baseUrl = 'https://nextjsacceleratorauth.appskeeper.in/';
+const authorization = `Basic ${btoa('RCC_USR:RCC_PWD')}`;
 
 const headers = (): { [key: string]: string } => {
     return {
@@ -10,31 +10,42 @@ const headers = (): { [key: string]: string } => {
         'Timezone': 'Asia/kolkata',
         'Platform': '1',
         'Device-Token': "qwertyuiop",
+        "Authorization": authorization
     }
 }
 
+const apiResponse = async (url: string, request: { [key: string]: string }): Promise<any> => {
+    const data = await fetch(url, {
+        headers: headers(),
+        ...request
+    })
+    const res = await data.json()
+    if (data.status.toString().startsWith('4') || data.status.toString().startsWith('5')) {
+        console.log(res)
+        return;
+    }
+    return res;
+}
 
-const httpPost = async (
+export const httpPost = async (
     url: string,
     body: { [key: string]: any },
 ): Promise<any> => {
     try {
-        const data = await fetch(
-            `${baseUrl}${url}`,
+        return apiResponse(`${baseUrl}${url}`,
             {
                 method: 'POST',
-                headers: headers(),
                 body: JSON.stringify(body)
-            });
+            }
+        );
 
-        return await data.json();;
     } catch (error) {
-
+        console.log('Error + ', error);
     }
 }
 
 
-const httpGet = async (
+export const httpGet = async (
     url: string,
     params?: { [key: string]: string | number | boolean },
 ): Promise<any> => {
@@ -48,16 +59,12 @@ const httpGet = async (
                 }
             });
         }
-
-        const data = await fetch(
-            `${baseUrl}${url}${paramsString}`,
+        return apiResponse(`${baseUrl}${url}${paramsString}`,
             {
                 method: "GET",
             }
         );
-
-        return await data.json();
     } catch (error) {
-
+        console.log('Error + ', error);
     }
 }

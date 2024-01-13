@@ -2,6 +2,7 @@
 import { useFormik } from "formik";
 import styles from "./Login.module.css";
 import * as yup from "yup";
+import { httpPost } from "@/utils";
 
 export default function LoginForm() {
   const loginSchema = yup.object().shape({
@@ -17,14 +18,16 @@ export default function LoginForm() {
     password: "",
   };
 
-  const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
-    useFormik({
+  const { errors, touched, handleBlur, handleChange, handleSubmit } = useFormik(
+    {
       initialValues,
       validationSchema: loginSchema,
-      onSubmit: (res) => {
-        console.log(res);
+      onSubmit: async (res) => {
+        const data = await httpPost("accounts/login", res);
+        console.log("data", data);
       },
-    });
+    }
+  );
 
   const inputClass =
     "block  px-0.5 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6";
