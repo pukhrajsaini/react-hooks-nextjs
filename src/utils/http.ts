@@ -1,4 +1,4 @@
-
+import { danger } from ".";
 const baseUrl = 'https://nextjsacceleratorauth.appskeeper.in/v1/';
 
 const authorization = `Basic ${btoa('RCC_USR:RCC_PWD')}`;
@@ -19,9 +19,9 @@ const apiResponse = async (url: string, request: { [key: string]: string }): Pro
         headers: headers(),
         ...request
     })
-    const res = await data.json()
+    const res = await data.json();
     if (data.status.toString().startsWith('4') || data.status.toString().startsWith('5')) {
-        console.log(res)
+        danger(res.message)
         return;
     }
     return res;

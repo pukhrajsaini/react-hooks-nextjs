@@ -2,7 +2,7 @@
 import { useFormik } from "formik";
 import styles from "./Login.module.css";
 import * as yup from "yup";
-import { httpPost } from "@/utils";
+import { danger, httpPost, success } from "@/utils";
 
 export default function LoginForm() {
   const loginSchema = yup.object().shape({
@@ -23,6 +23,7 @@ export default function LoginForm() {
       initialValues,
       validationSchema: loginSchema,
       onSubmit: async (res) => {
+        success("Check");
         const data = await httpPost("accounts/login", res);
         console.log("data", data);
       },
