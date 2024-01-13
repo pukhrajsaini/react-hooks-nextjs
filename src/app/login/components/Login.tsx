@@ -1,12 +1,34 @@
-import { Formik, Form, Field } from "formik";
+"use client";
+import { useFormik } from "formik";
 import styles from "./Login.module.css";
 import * as yup from "yup";
 
 export default function LoginForm() {
   const loginSchema = yup.object().shape({
-    email: yup.string().email().min(2).required(),
-    password: yup.string().required().min(4),
+    email: yup
+      .string()
+      .email("Email should be valid")
+      .required("Email is required"),
+    password: yup.string().required("Password is required"),
   });
+
+  const initialValues = {
+    email: "",
+    password: "",
+  };
+
+  const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
+    useFormik({
+      initialValues,
+      validationSchema: loginSchema,
+      onSubmit: (res) => {
+        console.log(res);
+      },
+    });
+
+  const inputClass =
+    "block  px-0.5 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6";
+  const errorInputClass = "border-2 border-rose-600";
 
   return (
     <>
@@ -35,83 +57,87 @@ export default function LoginForm() {
           </div>
 
           <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-            <Formik
-              initialValues={{ email: "", password: "" }}
-              validationSchema={loginSchema}
-              onSubmit={(values) => {
-                console.log(values);
-              }}
-            >
-              {({
-                values,
-                errors,
-                touched,
-                isSubmitting,
-                handleBlur,
-                handleChange,
-                handleSubmit,
-                handleReset,
-              }) => (
-                <form className="space-y-6" onSubmit={handleSubmit}>
-                  <div>
-                    <label
-                      htmlFor="email"
-                      className="block text-sm font-medium leading-6 text-gray-900"
-                    >
-                      Email address
-                    </label>
-                    <div className="mt-2">
-                      <input
-                        id="email"
-                        name="email"
-                        type="email"
-                        autoComplete="email"
-                        required
-                        className="block w-full  px-0.5 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                      />
-                    </div>
-                  </div>
+            <form className="space-y-6" onSubmit={handleSubmit}>
+              <div>
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium leading-6 text-gray-900"
+                >
+                  Email address
+                </label>
+                <div className="mt-2">
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    autoComplete="email"
+                    required
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    className={
+                      touched.email && errors.email
+                        ? `${inputClass} ${errorInputClass}`
+                        : inputClass
+                    }
+                  />
+                </div>
 
-                  <div>
-                    <div className="flex items-center justify-between">
-                      <label
-                        htmlFor="password"
-                        className="block text-sm font-medium leading-6 text-gray-900"
-                      >
-                        Password
-                      </label>
-                      <div className="text-sm">
-                        <a
-                          href="#"
-                          className="font-semibold text-indigo-600 hover:text-indigo-500"
-                        >
-                          Forgot password?
-                        </a>
-                      </div>
-                    </div>
-                    <div className="mt-2">
-                      <input
-                        id="password"
-                        name="password"
-                        type="password"
-                        autoComplete="current-password"
-                        required
-                        className="block  px-0.5 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                      />
-                    </div>
-                  </div>
+                <small className="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1">
+                  {touched.email && errors.email ? errors.email : ""}
+                </small>
+              </div>
 
-                  <div>
-                    <button
-                      type="submit"
-                      className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              <div>
+                <div className="flex items-center justify-between">
+                  <label
+                    htmlFor="password"
+                    className="block text-sm font-medium leading-6 text-gray-900"
+                  >
+                    Password
+                  </label>
+                  <div className="text-sm">
+                    <a
+                      href="#"
+                      className="font-semibold text-indigo-600 hover:text-indigo-500"
                     >
-                      Login
-                    </button>
+                      Forgot password?
+                    </a>
                   </div>
-                </form>
-              )}
-            </Formik>
+                </div>
+                <div className="mt-2">
+                  <input
+                    id="password"
+                    name="password"
+                    type="password"
+                    autoComplete="password"
+                    required
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    className={
+                      touched.password && errors.password
+                        ? `${inputClass} ${errorInputClass}`
+                        : inputClass
+                    }
+                  />
+                </div>
+                <small className="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1">
+                  {touched.password && errors.password ? errors.password : ""}
+                </small>
+              </div>
+
+              <div>
+                <button
+                  type="submit"
+                  disabled={
+                    Object.keys(errors).length > 0 ||
+                    Object.keys(touched).length === 0
+                  }
+                  className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                >
+                  Login
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
