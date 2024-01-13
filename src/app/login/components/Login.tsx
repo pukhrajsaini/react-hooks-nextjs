@@ -23,9 +23,8 @@ export default function LoginForm() {
       initialValues,
       validationSchema: loginSchema,
       onSubmit: async (res) => {
-        success("Check");
-        const data = await httpPost("accounts/login", res);
-        console.log("data", data);
+        const { message, result } = await httpPost("accounts/login", res);
+        success(message);
       },
     }
   );
