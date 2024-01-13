@@ -2,19 +2,16 @@
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { httpPost, success } from "@/utils";
-
-export default function LoginForm() {
+export default function ForgotPassword() {
   const loginSchema = yup.object().shape({
     email: yup
       .string()
       .email("Email should be valid")
       .required("Email is required"),
-    password: yup.string().required("Password is required"),
   });
 
   const initialValues = {
     email: "",
-    password: "",
   };
 
   const { errors, touched, handleBlur, handleChange, handleSubmit } = useFormik(
@@ -40,9 +37,9 @@ export default function LoginForm() {
           src="logo.svg"
           alt="Your Company"
         />
-        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+        {/* <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
           Welcome to Admin Accelerator Panel
-        </h2>
+        </h2> */}
       </div>
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
@@ -76,7 +73,7 @@ export default function LoginForm() {
             </small>
           </div>
 
-          <div>
+          {/* <div>
             <div className="flex items-center justify-between">
               <label
                 htmlFor="password"
@@ -112,7 +109,7 @@ export default function LoginForm() {
             <small className="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1">
               {touched.password && errors.password ? errors.password : ""}
             </small>
-          </div>
+          </div> */}
 
           <div>
             <button
