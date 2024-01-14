@@ -2,7 +2,7 @@
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { httpPost, success } from "@/utils";
-export default function ForgotPassword() {
+export default function ForgotPasswordForm() {
   const loginSchema = yup.object().shape({
     email: yup
       .string()
@@ -73,44 +73,6 @@ export default function ForgotPassword() {
             </small>
           </div>
 
-          {/* <div>
-            <div className="flex items-center justify-between">
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Password
-              </label>
-              <div className="text-sm">
-                <a
-                  href="#"
-                  className="font-semibold text-indigo-600 hover:text-indigo-500"
-                >
-                  Forgot password?
-                </a>
-              </div>
-            </div>
-            <div className="mt-2">
-              <input
-                id="password"
-                name="password"
-                type="password"
-                autoComplete="password"
-                required
-                onChange={handleChange}
-                onBlur={handleBlur}
-                className={
-                  touched.password && errors.password
-                    ? `${inputClass} ${errorInputClass}`
-                    : inputClass
-                }
-              />
-            </div>
-            <small className="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1">
-              {touched.password && errors.password ? errors.password : ""}
-            </small>
-          </div> */}
-
           <div>
             <button
               type="submit"
@@ -120,8 +82,17 @@ export default function ForgotPassword() {
               }
               className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
-              Login
+              Send password reset link
             </button>
+          </div>
+
+          <div className="text-sm">
+            <a
+              href="/login"
+              className="flex w-full justify-center font-semibold text-indigo-600 hover:text-indigo-500"
+            >
+              Back to login
+            </a>
           </div>
         </form>
       </div>
