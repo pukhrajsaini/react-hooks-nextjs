@@ -1,10 +1,13 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 export default function SearchRoute() {
   const [searchInput, setSearchInput] = useState("");
   const [list, setList] = useState([]);
+  const [categories, setCategories] = useState([]);
   const tableRef = useRef(null);
+  const [selectedCategory, setSelectedCategory] = useState("");
+
   const handleTableElement = (hide: boolean = false) => {
     const element = tableRef.current as any;
     if (element) {
@@ -18,7 +21,11 @@ export default function SearchRoute() {
   };
 
   useEffect(() => {
-    searchProducts(searchInput)
+    listCategories().then((res) => setCategories(res));
+  }, []);
+
+  useEffect(() => {
+    searchProducts(searchInput, selectedCategory)
       .then((res) => {
         setList(res);
         handleTableElement();
@@ -35,16 +42,39 @@ export default function SearchRoute() {
     }
   };
 
+  const handleCategorySelection = (event: any) => {
+    // const category = event.target.value;
+    // setSelectedCategory(category);
+    // setSearchInput("");
+  };
+
   return (
     <div className="container w-1/2 mx-auto px-4 py-4">
-      <form>
-        <label
+      <form className="flex flex-row">
+        {/* <label
+          htmlFor="countries"
+          className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+        >
+          ALL
+        </label> */}
+        <select
+          onSelect={handleCategorySelection}
+          id="countries"
+          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-64"
+        >
+          <option value="">ALL</option>
+          {categories.map((e: string) => (
+            <option value={e}> {e}</option>
+          ))}
+        </select>
+
+        {/* <label
           htmlFor="default-search"
           className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
         >
           Search
-        </label>
-        <div className="relative">
+        </label> */}
+        <div className="relative w-full mx-1">
           <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
             <svg
               className="w-4 h-4 text-gray-500 dark:text-gray-400"
@@ -91,11 +121,17 @@ export default function SearchRoute() {
   );
 }
 
-async function searchProducts(search: string) {
+async function searchProducts(search: string, category = "") {
   const data = await (
     await fetch(
-      `http://localhost:3009/bookings/v1/products/search?search=${search}`
+      `http://localhost:3009/bookings/v1/products/search?search=${search}&category=${category}`
     )
+  ).json();
+  return data.result;
+}
+async function listCategories() {
+  const data = await (
+    await fetch(`http://localhost:3009/bookings/v1/products/categories`)
   ).json();
   return data.result;
 }
