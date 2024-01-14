@@ -2,14 +2,26 @@
 import { useEffect, useRef, useState } from "react";
 
 export default function SearchRoute() {
-  const inputEl = useRef(null);
   const [searchInput, setSearchInput] = useState("");
-  const [list, setList] = useState([""]);
+  const [list, setList] = useState([]);
+  const tableRef = useRef(null);
+  const handleTableElement = (hide: boolean = false) => {
+    const element = tableRef.current as any;
+    if (element) {
+      if (hide) {
+        element.style.display = "none";
+        return;
+      }
+      if (list?.length) element.style.display = "block";
+      else element.style.display = "none";
+    }
+  };
 
   useEffect(() => {
     searchProducts(searchInput)
       .then((res) => {
         setList(res);
+        handleTableElement();
       })
       .catch((err) => console.log(err));
   }, [searchInput]);
@@ -18,11 +30,9 @@ export default function SearchRoute() {
     const searchText = event.target.value;
     if (searchText.length >= 2) {
       setSearchInput(searchText);
+    } else {
+      handleTableElement(true);
     }
-  };
-
-  const handleOnRowClick = (event: any) => {
-    console.log(event.target.nodeValue);
   };
 
   return (
@@ -59,18 +69,11 @@ export default function SearchRoute() {
             placeholder="Search Mockups, Logos..."
             required
             onChange={handleSearchInput}
-            ref={inputEl}
           />
-          {/* <button
-            type="submit"
-            className="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          >
-            Search
-          </button> */}
         </div>
       </form>
 
-      <div className="relative overflow-x-auto">
+      <div className="relative overflow-x-auto" ref={tableRef}>
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <tbody>
             {list?.map((e: any) => (
@@ -78,9 +81,7 @@ export default function SearchRoute() {
                 key={e._id}
                 className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
               >
-                <td className="px-6 py-4" onClick={handleOnRowClick}>
-                  {e?.name}
-                </td>
+                <td className="px-6 py-4">{e?.name}</td>
               </tr>
             ))}
           </tbody>
