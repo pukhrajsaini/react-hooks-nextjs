@@ -31,7 +31,7 @@ export default function SearchRoute() {
         handleTableElement();
       })
       .catch((err) => console.log(err));
-  }, [searchInput]);
+  }, [searchInput, selectedCategory]);
 
   const handleSearchInput = (event: any) => {
     const searchText = event.target.value;
@@ -43,9 +43,8 @@ export default function SearchRoute() {
   };
 
   const handleCategorySelection = (event: any) => {
-    // const category = event.target.value;
-    // setSelectedCategory(category);
-    // setSearchInput("");
+    const category = event.target.value;
+    setSelectedCategory(category);
   };
 
   return (
@@ -58,7 +57,7 @@ export default function SearchRoute() {
           ALL
         </label> */}
         <select
-          onSelect={handleCategorySelection}
+          onChange={handleCategorySelection}
           id="countries"
           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-64"
         >
