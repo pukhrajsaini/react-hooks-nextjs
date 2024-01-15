@@ -35,6 +35,12 @@ const UserRoute = () => {
       case "deleteUser": {
         return users.filter((user: any) => user.id !== action.id);
       }
+      case "addUser": {
+        if (!users.find((e: any) => e.id === action.newUser.id)) {
+          return [...users, action.newUser];
+        }
+        return users;
+      }
       case "updateUser": {
         return users.map((user: any) => {
           if (user.id == action.updatedUser.id) return action.updatedUser;
@@ -52,6 +58,13 @@ const UserRoute = () => {
     });
   };
 
+  const handleAddUser = (newUser: any) => {
+    dispatch({
+      type: "addUser",
+      newUser: newUser,
+    });
+  };
+
   const handleDeleteUser = (userId: number) => {
     dispatch({
       type: "deleteUser",
@@ -61,6 +74,8 @@ const UserRoute = () => {
 
   useEffect(() => {
     handleDeleteUser(2);
+    // console.log("user Effect");
+    handleAddUser({ id: 123, name: "ABC", admin: false, age: 13 });
   }, []);
 
   return (
