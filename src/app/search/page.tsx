@@ -63,7 +63,10 @@ export default function SearchRoute() {
         >
           <option value="">ALL</option>
           {categories.map((e: string) => (
-            <option value={e}> {e}</option>
+            <option key={e} value={e}>
+              {" "}
+              {e}
+            </option>
           ))}
         </select>
 
